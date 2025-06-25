@@ -8,3 +8,4 @@ support=24.0      # Magisk最低v24.0
 minApi=30         # Android 11 (API 30)
 needRamdisk=false
 template=17000
+projectUrl=https://github.com/mingzun09/All-in-one-module
