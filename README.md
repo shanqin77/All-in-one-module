@@ -4,9 +4,9 @@ Module system is made to be modular and customizable
 ## 如何使用该模块
 
 首先你需要Fok这个项目，在你fok的仓库中进行操作。
-你可以把你想要打包刷入的模块存放在'\modules\'目录中
-将想要打包安装的'APK'存放在'\system\priv-app\'目录中
-然后使用'Actions'构建你的一体化模块，就可以使用了。
+你可以把你想要打包刷入的模块存放在"\modules\"目录中
+将想要打包安装的"APK"存放在"\system\priv-app\"目录中
+然后使用"Actions"构建你的一体化模块，就可以使用了。
 
 ## 自定义配置或者操作
 
