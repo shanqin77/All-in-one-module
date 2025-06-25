@@ -22,8 +22,8 @@ jobs:
       run: |
         # 创建临时构建目录
         mkdir build_temp
-        # 移动所有模块文件到临时目录（排除.gitignore中指定的文件）
-        rsync -av --exclude-from='.gitignore' --exclude='.git/' --exclude='.github/' ./ build_temp/
+        # 移动所有模块文件到临时目录（排除指定文件）
+        rsync -av --exclude='README.md' --exclude='.gitignore' --exclude='.git/' --exclude='.github/' ./ build_temp/
 
     - name: Create Magisk module zip
       run: |
@@ -35,7 +35,7 @@ jobs:
         MODULE_NAME: All-in-one-module  # 可更改为你的模块名称
 
     - name: Upload artifact
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: magisk-module
         path: ${{ env.MODULE_NAME }}_${{ inputs.version }}.zip
