@@ -1,36 +1,41 @@
-# This is a basic workflow to help you get started with Actions
+name: Build Magisk Module
 
-name: All-in-one-module
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'Module version (e.g. 1.0.0)'
+        required: true
+        type: string
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   build:
-    # The type of runner that the job will run on
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+    - name: Setup module directory
+      run: |
+        # 创建临时构建目录
+        mkdir build_temp
+        # 移动所有模块文件到临时目录（排除.gitignore中指定的文件）
+        rsync -av --exclude-from='.gitignore' --exclude='.git/' --exclude='.github/' ./ build_temp/
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
-        run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+    - name: Create Magisk module zip
+      run: |
+        cd build_temp
+        # 创建压缩包（确保只有一层结构）
+        zip -r -9 ../${MODULE_NAME}_${{ inputs.version }}.zip *
+        cd ..
+      env:
+        MODULE_NAME: All-in-one-module  # 可更改为你的模块名称
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v3
+      with:
+        name: magisk-module
+        path: ${{ env.MODULE_NAME }}_${{ inputs.version }}.zip
