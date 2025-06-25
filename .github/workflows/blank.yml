@@ -11,6 +11,8 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      MODULE_NAME: All-in-one-module  # 定义模块名称
 
     steps:
     - name: Checkout repository
@@ -29,10 +31,12 @@ jobs:
       run: |
         cd build_temp
         # 创建压缩包（确保只有一层结构）
-        zip -r -9 ../${MODULE_NAME}_${{ inputs.version }}.zip *
+        ZIP_NAME="${MODULE_NAME}_${{ inputs.version }}.zip"
+        zip -r -9 "../$ZIP_NAME" *
         cd ..
-      env:
-        MODULE_NAME: All-in-one-module  # 可更改为你的模块名称
+        # 打印生成的文件路径用于调试
+        echo "Generated zip file: $(pwd)/$ZIP_NAME"
+        ls -lh "$ZIP_NAME"
 
     - name: Upload artifact
       uses: actions/upload-artifact@v4
